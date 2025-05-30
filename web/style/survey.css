@@ -1,0 +1,54 @@
+.survey-form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.question {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.options {
+    margin-top: 10px;
+}
+
+.option {
+    margin: 5px 0;
+}
+
+textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.survey-message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #45a049;
+}

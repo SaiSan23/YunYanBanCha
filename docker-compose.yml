@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  web:    # 網頁伺服器
+    image: nginx:alpine
+    ports:
+      - "8080:80"    # 將容器的80埠映射到主機的8080埠
+    volumes:
+      - ./web:/usr/share/nginx/html    # 將本地web目錄掛載到容器中的/usr/share/nginx/html目錄
+    depends_on:        # 依賴的服務：等"指定服務"啟動完畢後再啟動當前服務
+      - api-gateway
+    networks:
+      - app-network
+
+  api-gateway:    # API 網關服務
+    build: ./services/api-gateway
+    ports:
+      - "5001:5000"
+    depends_on:
+      - other-service
+      - auth-service
+      - survey-service
+    networks:
+      - app-network
+
+  other-service:     # 其他服務
+    build: ./services/other-service
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=example
+      - DB_NAME=testdb
+    networks:
+      - app-network
+
+  auth-service:    # 認證服務
+    build: ./services/auth-service
+    depends_on:
+      - db
+    environment: # 環境變數，用於配置服務，例如資料庫連接，JWT密鑰等
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=example
+      - DB_NAME=testdb
+      - JWT_SECRET_KEY=your_secret_key_change_this_in_production
+    networks:
+      - app-network
+
+  survey-service:    # 問卷服務
+    build: ./services/survey-service
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=example
+      - DB_NAME=testdb
+    networks:
+      - app-network
+
+  db:    # 資料庫服務
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: testdb
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    command:
+      --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./sql-init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+    healthcheck:  # 健康檢查：確保資料庫服務正在運行
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]  # 執行mysqladmin ping命令，檢查資料庫服務是否正常
+      interval: 5s  # 每5秒執行一次健康檢查
+      timeout: 5s  # 健康檢查超時時間
+      retries: 10  # 健康檢查失敗重試次數
+      start_period: 60s  # 服務啟動後，等待60秒後才開始進行健康檢查
+
+  seeder:
+    build: ./seed
+    depends_on:
+      - db
+    restart: "no"
+    networks:
+      - app-network
+
+networks:  # 網路設定：使用Docker的預設網路驅動器，可以讓服務之間進行通訊，但不允許外部訪問
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:

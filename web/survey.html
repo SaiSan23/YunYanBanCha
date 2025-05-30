@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>茶型人格問卷</title>
+    <link rel="stylesheet" href="style/main.css">
+    <link rel="stylesheet" href="style/auth.css">
+    <link rel="stylesheet" href="style/survey.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="nav-links">
+            <a href="index.html">首頁</a>
+            <a href="login.html">登入</a>
+            <a href="register.html">註冊</a>
+            <a href="survey.html">茶型人格問卷</a>
+        </div>
+        
+        <div class="card">
+            <h2 id="questionnaire-title">茶型人格問卷</h2>
+            <p>感謝您參與我們的問卷調查，您的回答將幫助我們了解您的茶型人格！</p>
+            
+            <div id="surveyForm" class="survey-form">
+                <form id="userSurvey">
+                    <div id="questionsContainer">
+                        <!-- 問卷題目將從資料庫動態載入 -->
+                    </div>
+                    
+                    <button type="submit">提交問卷</button>
+                    <div id="surveyMessage" class="survey-message hidden"></div>
+                </form>
+            </div>
+            
+            <div id="loginPrompt" class="hidden">
+                <p>您的問卷已暫存。要將結果保存到您的帳戶，請登入或註冊。</p>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn">登入</a>
+                    <a href="register.html" class="btn">註冊</a>
+                </div>
+            </div>
+            
+            <div id="surveySuccess" class="hidden">
+                <h3>感謝您完成問卷！</h3>
+                <p>您的茶型人格結果已成功提交。</p>
+                <div id="teaPersonalityResult" class="hidden">
+                    <h4 id="teaTypeName"></h4>
+                    <p id="teaTypeDescription"></p>
+                    <img id="teaTypeImage" src="" alt="茶型人格圖片">
+                </div>
+                <a href="index.html" class="btn">返回首頁</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/survey.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+
+</html>
