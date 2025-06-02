@@ -53,6 +53,9 @@ function handleLogin(e) {
     })
         .then(response => response.json())
         .then(data => {
+
+            console.log("🔥 登入後回傳的資料：", data);
+
             const messageElement = document.getElementById('loginMessage');
             if (data.error) {
                 messageElement.className = 'error';
@@ -64,6 +67,7 @@ function handleLogin(e) {
                 // 保存令牌和用戶名
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('username', data.username);
+                localStorage.setItem('user_id', data.user_id);  
 
                 // 顯示用戶信息，隱藏登入表單
                 if (document.getElementById('loginForm')) {

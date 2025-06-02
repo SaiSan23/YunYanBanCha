@@ -1,18 +1,18 @@
 version: '3.8'
 
 services:
-  web:    # 網頁伺服器
+  web:
     image: nginx:alpine
     ports:
-      - "8080:80"    # 將容器的80埠映射到主機的8080埠
+      - "8080:80"
     volumes:
-      - ./web:/usr/share/nginx/html    # 將本地web目錄掛載到容器中的/usr/share/nginx/html目錄
-    depends_on:        # 依賴的服務：等"指定服務"啟動完畢後再啟動當前服務
+      - ./web:/usr/share/nginx/html
+    depends_on:
       - api-gateway
     networks:
       - app-network
 
-  api-gateway:    # API 網關服務
+  api-gateway:
     build: ./services/api-gateway
     ports:
       - "5001:5000"
@@ -20,10 +20,11 @@ services:
       - other-service
       - auth-service
       - survey-service
+      - mission-service   # ✅ 加這行可確保網關等任務啟動
     networks:
       - app-network
 
-  other-service:     # 其他服務
+  other-service:
     build: ./services/other-service
     depends_on:
       - db
@@ -35,11 +36,11 @@ services:
     networks:
       - app-network
 
-  auth-service:    # 認證服務
+  auth-service:
     build: ./services/auth-service
     depends_on:
       - db
-    environment: # 環境變數，用於配置服務，例如資料庫連接，JWT密鑰等
+    environment:
       - DB_HOST=db
       - DB_USER=root
       - DB_PASSWORD=example
@@ -48,8 +49,10 @@ services:
     networks:
       - app-network
 
-  survey-service:    # 問卷服務
+  survey-service:
     build: ./services/survey-service
+    ports:
+      - "5002:5002"
     depends_on:
       - db
     environment:
@@ -60,7 +63,21 @@ services:
     networks:
       - app-network
 
-  db:    # 資料庫服務
+  mission-service:
+    build: ./services/mission-service
+    ports:
+      - "5003:5003"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=example
+      - DB_NAME=testdb
+    networks:
+      - app-network
+
+  db:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: example
@@ -74,12 +91,12 @@ services:
       - ./sql-init:/docker-entrypoint-initdb.d
     networks:
       - app-network
-    healthcheck:  # 健康檢查：確保資料庫服務正在運行
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]  # 執行mysqladmin ping命令，檢查資料庫服務是否正常
-      interval: 5s  # 每5秒執行一次健康檢查
-      timeout: 5s  # 健康檢查超時時間
-      retries: 10  # 健康檢查失敗重試次數
-      start_period: 60s  # 服務啟動後，等待60秒後才開始進行健康檢查
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
 
   seeder:
     build: ./seed
@@ -89,7 +106,7 @@ services:
     networks:
       - app-network
 
-networks:  # 網路設定：使用Docker的預設網路驅動器，可以讓服務之間進行通訊，但不允許外部訪問
+networks:
   app-network:
     driver: bridge
 

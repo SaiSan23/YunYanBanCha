@@ -3,6 +3,7 @@ body {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    background-color: #fdfdfd;
 }
 
 .container {
@@ -16,6 +17,7 @@ body {
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #fff;
 }
 
 button {
@@ -25,6 +27,7 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-right: 10px;
 }
 
 button:hover {
@@ -43,8 +46,62 @@ button:hover {
     margin-right: 15px;
     text-decoration: none;
     color: #4CAF50;
+    font-weight: bold;
 }
 
 .nav-links a:hover {
     text-decoration: underline;
+}
+
+
+#missions ul {
+    padding-left: 1.2em;
+    margin-top: 10px;
+}
+
+#missions li {
+    margin-bottom: 8px;
+    list-style: none;
+    position: relative;
+    padding-left: 1.6em;
+}
+
+#missions li::before {
+    content: '📌';
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* 任務彈窗樣式 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.close-btn {
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
 }
