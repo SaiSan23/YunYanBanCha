@@ -26,10 +26,6 @@ def get_current_questionnaire():
     cursor = conn.cursor(dictionary=True)
     
     try:
-        # 插入一些中文測試數據（如果表是空的）
-        cursor.execute("SELECT COUNT(*) as count FROM Questionnaires")
-        count = cursor.fetchone()['count']
-
         # 如果有指定分类，则查询该分类的问卷
         cursor.execute("SELECT title FROM Questionnaires WHERE category_id = %s", (category,))
         questionnaires = cursor.fetchall()
