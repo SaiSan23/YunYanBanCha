@@ -27,3 +27,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // 每秒更新一次時間
     setInterval(updateCurrentTime, 1000);
 });
+

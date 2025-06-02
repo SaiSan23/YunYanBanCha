@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS Users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 季節分類資料表
+-- 季節分類資料表  為什麼不直接叫 Season 就好 囧
 CREATE TABLE IF NOT EXISTS Category (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     code VARCHAR(50) NOT NULL,
@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS Missions (
     type VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (tea_type_id) REFERENCES TeaPersonalityTypes(tea_type_id)
+    
 );
 
 -- 使用者任務紀錄資料表
@@ -99,3 +100,4 @@ CREATE TABLE IF NOT EXISTS MissionCoupons (
     FOREIGN KEY (mission_id) REFERENCES Missions(mission_id),
     FOREIGN KEY (coupon_id) REFERENCES Coupons(coupon_id)
 );
+
